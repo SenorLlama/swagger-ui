@@ -15,6 +15,8 @@ var connect = require('gulp-connect');
 var header = require('gulp-header');
 var pkg = require('./package.json');
 var order = require('gulp-order');
+var zip = require('gulp-zip');
+var runSequence = require('run-sequence');
 var banner = ['/**',
   ' * <%= pkg.name %> - <%= pkg.description %>',
   ' * @version v<%= pkg.version %>',
@@ -107,6 +109,16 @@ gulp.task('copy', ['less'], function() {
     .src(['./src/main/html/**/*'])
     .pipe(gulp.dest('./dist'))
     .on('error', log);
+});
+
+/**
+ * zip dist into archive so it can be downloaded for jar creation
+ */
+gulp.task('archive', function() {
+  return gulp
+    .src('dist/**')
+    .pipe(zip('archive.zip'))
+    .pipe(gulp.dest('archive'));
 });
 
 /**
